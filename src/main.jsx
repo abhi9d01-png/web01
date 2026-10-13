@@ -84,24 +84,13 @@ function App() {
           <img className="desk-object film-object" src="/photo/cmaera_rol-removebg-preview.png" alt="" />
           <img className="desk-object lighter-object" src="/photo/lighter-removebg-preview.png" alt="" />
         </div>
+        <img className="hero-right-collage" src="/photo/hero-right-still-life.png" alt="" aria-hidden="true" />
         <div className="hero-center">
           <h1>Abhiraj</h1>
           <p className="hero-role">Software Developer &amp; Network Engineer</p>
           <p className="hero-motto"><em>Verb &amp; Noun</em></p>
           <p className="hero-copy">a thoughtful process of crafting experiences that engage people,<br className="desktop-break"/> shape clarity, and spark delights.</p>
         </div>
-        <div className="vinyl-player" aria-label="Decorative music player">
-          <div className="record"><div className="record-label"/><span className="record-hole"/></div>
-          <span className="player-wave">▮〰</span><span className="player-artist">Souleance</span>
-          <span className="player-track">Jazz et thé vert</span><span className="player-progress"><i/></span>
-          <span className="player-time">1:36 / 3:32</span>
-        </div>
-        <img className="folder-sticker" src="/photo/fille_icon-removebg-preview.png" alt="" />
-        <div className="airdrop-card" aria-hidden="true"><b>AirDrop</b><small>Abhir would like to share a photo</small><div/><footer><span>Decline</span><span>Accept</span></footer></div>
-        <div className="paint-toolbar" aria-hidden="true">
-          <span>✥</span><span>▧</span><span>▱</span><span>◈</span><span>✎</span><span>◉</span><span>◒</span><span>⌕</span><span>✐</span><span>▰</span><span>╱</span><span>〰</span><span>▱</span><span>▰</span><span>◯</span><span>▭</span>
-        </div>
-        <span className="pixel-pointer" aria-hidden="true"/>
         <a className="scroll-cue" href="#work" aria-label="Scroll to work"><span>⌄</span><span>⌄</span></a>
       </section>
 
