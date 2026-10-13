@@ -85,8 +85,8 @@ function App() {
           <img className="desk-object lighter-object" src="/photo/lighter-removebg-preview.png" alt="" />
         </div>
         <div className="hero-center">
-          <h1>Abhir</h1>
-          <p className="hero-role">Product Design</p>
+          <h1>Abhiraj</h1>
+          <p className="hero-role">Software Developer &amp; Network Engineer</p>
           <p className="hero-motto"><em>Verb &amp; Noun</em></p>
           <p className="hero-copy">a thoughtful process of crafting experiences that engage people,<br className="desktop-break"/> shape clarity, and spark delights.</p>
           <div className="hero-tools" aria-label="Creative tools">
