@@ -89,9 +89,6 @@ function App() {
           <p className="hero-role">Software Developer &amp; Network Engineer</p>
           <p className="hero-motto"><em>Verb &amp; Noun</em></p>
           <p className="hero-copy">a thoughtful process of crafting experiences that engage people,<br className="desktop-break"/> shape clarity, and spark delights.</p>
-          <div className="hero-tools" aria-label="Creative tools">
-            <span title="Coffee">▤</span><span title="Ideas">♧</span><span title="Sketching">✎</span>
-          </div>
         </div>
         <div className="vinyl-player" aria-label="Decorative music player">
           <div className="record"><div className="record-label"/><span className="record-hole"/></div>
