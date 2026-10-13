@@ -18,53 +18,128 @@ function SectionLabel({ children }) {
   return <p className="section-label">{children}</p>;
 }
 
-function ProjectPreview({ project }) {
-  if (!project) return <div className="project-preview" aria-hidden="true" />;
+function DraggableProjectStack() {
+  const stackRef = React.useRef(null);
+  const dragRef = React.useRef(null);
+  const [offsets, setOffsets] = React.useState({});
+  const [cardOrder, setCardOrder] = React.useState(featured.map((project) => project.name));
+
+  function moveCard(projectName, x, y) {
+    setOffsets((current) => ({
+      ...current,
+      [projectName]: { x, y },
+    }));
+  }
+
+  function bringToFront(projectName) {
+    setCardOrder((current) => [
+      ...current.filter((name) => name !== projectName),
+      projectName,
+    ]);
+  }
+
+  function startDragging(event, projectName) {
+    if (event.button !== 0 || !stackRef.current) return;
+    event.preventDefault();
+    const card = event.currentTarget;
+    const currentOffset = offsets[projectName] ?? { x: 0, y: 0 };
+    dragRef.current = {
+      pointerId: event.pointerId,
+      projectName,
+      startX: event.clientX,
+      startY: event.clientY,
+      offsetX: currentOffset.x,
+      offsetY: currentOffset.y,
+      cardRect: card.getBoundingClientRect(),
+    };
+    card.setPointerCapture(event.pointerId);
+    bringToFront(projectName);
+  }
+
+  function dragCard(event) {
+    const drag = dragRef.current;
+    if (!drag || drag.pointerId !== event.pointerId || !stackRef.current) return;
+    const frame = stackRef.current.getBoundingClientRect();
+    const deltaX = event.clientX - drag.startX;
+    const deltaY = event.clientY - drag.startY;
+    const boundedX = Math.min(
+      frame.right - drag.cardRect.right,
+      Math.max(frame.left - drag.cardRect.left, deltaX),
+    );
+    const boundedY = Math.min(
+      frame.bottom - drag.cardRect.bottom,
+      Math.max(frame.top - drag.cardRect.top, deltaY),
+    );
+    moveCard(drag.projectName, drag.offsetX + boundedX, drag.offsetY + boundedY);
+  }
+
+  function stopDragging(event) {
+    if (dragRef.current?.pointerId === event.pointerId) dragRef.current = null;
+  }
+
+  function nudgeCard(event, projectName) {
+    const directions = {
+      ArrowLeft: [-16, 0],
+      ArrowRight: [16, 0],
+      ArrowUp: [0, -16],
+      ArrowDown: [0, 16],
+    };
+    const direction = directions[event.key];
+    if (!direction || !stackRef.current) return;
+    event.preventDefault();
+    const card = event.currentTarget;
+    const frame = stackRef.current.getBoundingClientRect();
+    const bounds = card.getBoundingClientRect();
+    const currentOffset = offsets[projectName] ?? { x: 0, y: 0 };
+    const deltaX = Math.min(frame.right - bounds.right, Math.max(frame.left - bounds.left, direction[0]));
+    const deltaY = Math.min(frame.bottom - bounds.bottom, Math.max(frame.top - bounds.top, direction[1]));
+    moveCard(projectName, currentOffset.x + deltaX, currentOffset.y + deltaY);
+    bringToFront(projectName);
+  }
+
   return (
-    <div key={project.name} className={`project-preview ${project.color}`} aria-label={`${project.name} project preview`}>
-      <div className="preview-backdrop" />
-      <div className="preview-browser">
-        <div className="preview-chrome"><span /><span /><span /><i>{project.name.toLowerCase().replaceAll(' ', '')}.studio</i></div>
-        <div className="preview-screen">
-          <span className="preview-eyebrow">{project.eyebrow}</span>
-          <strong>{project.headline}</strong>
-          <p>{project.note}</p>
-          <div className="preview-screen-art"><i /><i /><i /></div>
-          <div className="preview-tiles">{project.tiles.map((tile) => <span key={tile}>{tile}</span>)}</div>
-        </div>
-      </div>
-      <div className="preview-phone">
-        <div className="phone-island" />
-        <span className="preview-eyebrow">{project.name}</span>
-        <strong>{project.headline}</strong>
-        <div className="phone-art"><i /><i /></div>
-        <span className="phone-action">Take a moment <b>↗</b></span>
-      </div>
-      <div className="preview-note"><span>Selected work</span><b>{project.name}</b><small>{project.kind}</small></div>
+    <div className="project-stack" ref={stackRef} aria-label="Draggable featured project cards">
+      <p className="stack-hint">Drag a card to explore</p>
+      {featured.map((project, index) => {
+        const offset = offsets[project.name] ?? { x: 0, y: 0 };
+        return (
+          <article
+            className={`project-card ${project.color}`}
+            key={project.name}
+            tabIndex={0}
+            aria-label={`${project.name}. Drag to move, or use the arrow keys.`}
+            onPointerDown={(event) => startDragging(event, project.name)}
+            onPointerMove={dragCard}
+            onPointerUp={stopDragging}
+            onPointerCancel={stopDragging}
+            onKeyDown={(event) => nudgeCard(event, project.name)}
+            style={{
+              '--drag-x': `${offset.x}px`,
+              '--drag-y': `${offset.y}px`,
+              '--card-rotation': `${[-7, 5, -2][index]}deg`,
+              zIndex: cardOrder.indexOf(project.name) + 1,
+            }}
+          >
+            <div className={`project-card-art artwork art-${index + 1}`} aria-hidden="true">
+              <span className="art-shape shape-one" />
+              <span className="art-shape shape-two" />
+              <span className="art-caption">{['take it easy', 'find your people', 'rest is part of it'][index]}</span>
+            </div>
+            <div className="project-card-meta">
+              <span>Selected work</span>
+              <span>0{index + 1} / 03</span>
+            </div>
+            <h3>{project.name}</h3>
+            <p>{project.detail}</p>
+            <span className="project-card-kind">{project.kind}<span aria-hidden="true"> ↗</span></span>
+          </article>
+        );
+      })}
     </div>
   );
 }
 
 function App() {
-  const [activeProject, setActiveProject] = React.useState(null);
-  const touchSelection = React.useRef(false);
-
-  function projectEvents(project) {
-    return {
-      onPointerEnter: (event) => { if (event.pointerType === 'mouse') setActiveProject(project); },
-      onFocus: () => setActiveProject(project),
-      onTouchStart: () => { touchSelection.current = true; },
-      onClick: (event) => {
-        if (!touchSelection.current) return;
-        touchSelection.current = false;
-        if (activeProject?.name !== project.name) {
-          event.preventDefault();
-          setActiveProject(project);
-        }
-      },
-    };
-  }
-
   return (
     <main>
       <header className="topbar wrap">
@@ -95,20 +170,8 @@ function App() {
 
       <section className="work-section wrap" id="work">
         <SectionLabel>Recently made <span aria-hidden="true">▶</span></SectionLabel>
-        <div className="project-showcase" onPointerLeave={(event) => { if (event.pointerType === 'mouse') setActiveProject(null); }}>
-          <div className="featured-grid">
-            {featured.map((item, index) => (
-              <a className={`feature-card ${item.color} ${activeProject?.name === item.name ? 'is-active' : ''}`} href="#contact" key={item.name} {...projectEvents(item)}>
-                <div className={`artwork art-${index + 1}`} aria-hidden="true">
-                  <span className="art-shape shape-one" /><span className="art-shape shape-two" />
-                  <span className="art-caption">{['take it easy', 'find your people', 'rest is part of it'][index]}</span>
-                </div>
-                <div className="card-meta"><span>{item.name}</span><span>{item.kind}</span></div>
-                <p>{item.detail}<span aria-hidden="true"> ↗</span></p>
-              </a>
-            ))}
-          </div>
-          <ProjectPreview project={activeProject} />
+        <div className="project-showcase">
+          <DraggableProjectStack />
         </div>
       </section>
 
