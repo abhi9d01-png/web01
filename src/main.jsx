@@ -46,7 +46,6 @@ function ProjectPreview({ project }) {
 }
 
 function App() {
-  const [playing, setPlaying] = React.useState(false);
   const [activeProject, setActiveProject] = React.useState(null);
   const touchSelection = React.useRef(false);
 
@@ -131,25 +130,17 @@ function App() {
       <section className="about-section wrap" id="about">
         <div><SectionLabel>A little about me <span aria-hidden="true">⌘</span></SectionLabel></div>
         <div className="about-body">
-          <p className="about-lead">Hi, I’m Abhir — a designer and curious maker who likes turning tangled ideas into clear, delightful experiences.</p>
-          <p>I care about the small details that make a product feel considered: the words, the rhythm, the moment when something just makes sense.</p>
-          <p>This page is a work in progress. I’m gathering the projects and stories that feel most like me, and I’m glad you stopped by.</p>
-          <p className="signoff">I make things with care <span aria-hidden="true">☺</span></p>
+          <p className="about-lead">Hi, I’m Abhiraj somewhere between a curious mind and a terminal full of unfinished ideas.</p>
+          <p>I like understanding how things work, imagining how they could work better, and building things that bring those ideas to life. From writing code to obsessing over the little details of a design, I’m drawn to the space where logic meets creativity.</p>
+          <p>Most of what I make starts with a question, a random thought, or a <em>“what if?”</em></p>
+          <p>I’m still figuring things out, one experiment at a time. This is where I put the things I build, the ideas I chase, and a little bit of the person behind them.</p>
+          <p className="signoff"><strong>Curious by nature. Building by choice.</strong></p>
           <div className="contact-links" id="contact">
-            <div><a href="https://www.linkedin.com/" target="_blank" rel="noreferrer">LinkedIn ↗</a><a href="https://www.instagram.com/" target="_blank" rel="noreferrer">Instagram ↗</a></div>
-            <a href="mailto:hello@example.com">E-mail: hello@example.com ↗</a>
+            <div><a href="https://www.linkedin.com/in/abhiraj-singh-94763b357/?isSelfProfile=true" target="_blank" rel="noreferrer">LinkedIn ↗</a><a href="https://www.instagram.com/something.dummm?cplk=Z2ljbWYwd3JiNWs=" target="_blank" rel="noreferrer">Instagram ↗</a><a href="https://github.com/abhi9d01-png" target="_blank" rel="noreferrer">GitHub ↗</a></div>
+            <a href="mailto:get.abhirajsingh@gmail.com">E-mail: get.abhirajsingh@gmail.com ↗</a>
           </div>
         </div>
       </section>
-
-      <footer className="footer wrap">
-        <div className="player">
-          <button className="play-button" type="button" onClick={() => setPlaying(!playing)} aria-label={playing ? 'Pause music' : 'Play music'}>{playing ? 'Ⅱ' : '▶'}</button>
-          <div className="track"><span className="track-title">A little background music</span><span className="track-artist">A playlist for making things</span></div>
-          <span className="track-time">{playing ? 'playing' : '0:00'} <span className="track-line" /></span>
-        </div>
-        <div className="footer-note"><span>Made slowly, with intention.</span><span>© 2025 Abhir</span></div>
-      </footer>
     </main>
   );
 }
