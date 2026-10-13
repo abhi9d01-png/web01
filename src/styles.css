@@ -191,3 +191,21 @@ main>section:not(.hero){font-family:var(--typewriter);color:var(--body-ink)}
 .hero-right-collage{position:absolute;z-index:1;top:2%;right:0;width:min(31.25vw,625px);height:auto;max-height:90%;object-fit:contain;object-position:center;pointer-events:none}
 @media(max-width:900px){.hero-right-collage{top:52%;right:0;height:43%;width:auto;max-width:37vw}}
 @media(max-width:600px){.hero-right-collage{top:56%;right:0;height:auto;width:min(45vw,235px);max-height:39%;max-width:none;object-fit:contain}}
+
+.portfolio-content{min-height:100svh;opacity:0;visibility:hidden;transition:opacity .65s ease}
+.portfolio-content--visible{opacity:1;visibility:visible}
+.preloader{position:fixed;inset:0;z-index:10000;display:grid;place-items:center;overflow:hidden;background:#fffaf5;color:#424044;opacity:1;transition:opacity .65s ease;pointer-events:auto}
+.preloader::before,.preloader::after{position:absolute;content:"";pointer-events:none}
+.preloader::before{inset:24px;border:1px solid rgba(120,134,107,.2)}
+.preloader::after{width:min(48vw,420px);aspect-ratio:1;border:1px solid rgba(120,134,107,.11);border-radius:50%;box-shadow:0 0 0 34px rgba(120,134,107,.035),0 0 0 68px rgba(120,134,107,.025)}
+.preloader-content{position:relative;z-index:1;width:min(760px,calc(100% - 48px));text-align:center}
+.preloader-label,.preloader-status{font:11px/1.5 var(--mono);letter-spacing:.13em;text-transform:uppercase;color:#85857c}
+.preloader-label{margin:0 0 25px}
+.preloader-message{margin:0;font:clamp(22px,4.6vw,42px)/1.3 'Courier Prime',var(--mono);letter-spacing:-.035em;overflow-wrap:anywhere}
+.preloader-encrypted{color:#9caa87}
+.preloader-revealed{color:#424044}
+.preloader-status{margin:27px 0 0;font-size:9px;letter-spacing:.1em}
+.preloader-status span{color:#78866b;letter-spacing:.2em}
+.preloader--exiting{opacity:0;pointer-events:none}
+@media(max-width:600px){.preloader::before{inset:14px}.preloader-label{font-size:9px;margin-bottom:20px}.preloader-message{font-size:clamp(20px,6vw,30px)}.preloader-status{margin-top:21px}}
+@media(prefers-reduced-motion:reduce){.portfolio-content,.preloader{transition:none}}

@@ -1,5 +1,6 @@
 import React from 'react';
 import { createRoot } from 'react-dom/client';
+import { Preloader } from './components/preloader.jsx';
 import './styles.css';
 
 const featured = [
@@ -140,7 +141,42 @@ function DraggableProjectStack() {
 }
 
 function App() {
+  const [preloaderVisible, setPreloaderVisible] = React.useState(true);
+  const [preloaderExiting, setPreloaderExiting] = React.useState(false);
+  const exitTimerRef = React.useRef(null);
+
+  React.useEffect(() => () => window.clearTimeout(exitTimerRef.current), []);
+
+  const handlePreloaderComplete = React.useCallback(() => {
+    exitTimerRef.current = window.setTimeout(() => {
+      if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+        setPreloaderVisible(false);
+        return;
+      }
+
+      setPreloaderExiting(true);
+      exitTimerRef.current = window.setTimeout(() => {
+        setPreloaderVisible(false);
+      }, 650);
+    }, 2000);
+  }, []);
+
+  React.useEffect(() => {
+    if (!preloaderVisible) return undefined;
+    const previousOverflow = document.body.style.overflow;
+    document.body.style.overflow = 'hidden';
+    return () => {
+      document.body.style.overflow = previousOverflow;
+    };
+  }, [preloaderVisible]);
+
   return (
+    <>
+    <div
+      className={`portfolio-content${preloaderExiting || !preloaderVisible ? ' portfolio-content--visible' : ''}`}
+      aria-hidden={preloaderVisible && !preloaderExiting}
+      inert={preloaderVisible && !preloaderExiting}
+    >
     <main>
       <header className="topbar wrap">
         <a className="wordmark" href="#top" aria-label="Abhir, home">A<span>✳</span></a>
@@ -205,6 +241,11 @@ function App() {
         </div>
       </section>
     </main>
+    </div>
+    {preloaderVisible && (
+      <Preloader exiting={preloaderExiting} onComplete={handlePreloaderComplete} />
+    )}
+    </>
   );
 }
 
