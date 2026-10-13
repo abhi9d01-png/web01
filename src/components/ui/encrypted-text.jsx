@@ -6,6 +6,7 @@ export function EncryptedText({
   text,
   encryptedClassName = '',
   revealedClassName = '',
+  startDelayMs = 0,
   revealDelayMs = 50,
   onComplete,
 }) {
@@ -52,7 +53,7 @@ export function EncryptedText({
     if (motionPreference.matches || text.length === 0) {
       finish();
     } else {
-      timeoutId = window.setTimeout(revealNextCharacter, revealDelayMs);
+      timeoutId = window.setTimeout(revealNextCharacter, startDelayMs + revealDelayMs);
     }
 
     return () => {
@@ -60,7 +61,7 @@ export function EncryptedText({
       window.clearTimeout(timeoutId);
       motionPreference.removeEventListener('change', handleMotionPreferenceChange);
     };
-  }, [revealDelayMs, text]);
+  }, [revealDelayMs, startDelayMs, text]);
 
   return (
     <span className="encrypted-text" aria-hidden="true">

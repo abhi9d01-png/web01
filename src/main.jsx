@@ -142,23 +142,30 @@ function DraggableProjectStack() {
 
 function App() {
   const [preloaderVisible, setPreloaderVisible] = React.useState(true);
-  const [preloaderExiting, setPreloaderExiting] = React.useState(false);
-  const exitTimerRef = React.useRef(null);
+  const [portfolioVisible, setPortfolioVisible] = React.useState(false);
+  const transitionTimersRef = React.useRef([]);
+  const transitionStartedRef = React.useRef(false);
 
-  React.useEffect(() => () => window.clearTimeout(exitTimerRef.current), []);
+  React.useEffect(() => {
+    if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+      setPortfolioVisible(true);
+      setPreloaderVisible(false);
+      return undefined;
+    }
 
-  const handlePreloaderComplete = React.useCallback(() => {
-    exitTimerRef.current = window.setTimeout(() => {
-      if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
-        setPreloaderVisible(false);
-        return;
-      }
+    return () => {
+      transitionTimersRef.current.forEach(window.clearTimeout);
+      transitionTimersRef.current = [];
+    };
+  }, []);
 
-      setPreloaderExiting(true);
-      exitTimerRef.current = window.setTimeout(() => {
-        setPreloaderVisible(false);
-      }, 650);
-    }, 2000);
+  const handlePreloaderSequenceStart = React.useCallback(() => {
+    if (transitionStartedRef.current || window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+    transitionStartedRef.current = true;
+    transitionTimersRef.current = [
+      window.setTimeout(() => setPortfolioVisible(true), 1500),
+      window.setTimeout(() => setPreloaderVisible(false), 2000),
+    ];
   }, []);
 
   React.useEffect(() => {
@@ -173,9 +180,9 @@ function App() {
   return (
     <>
     <div
-      className={`portfolio-content${preloaderExiting || !preloaderVisible ? ' portfolio-content--visible' : ''}`}
-      aria-hidden={preloaderVisible && !preloaderExiting}
-      inert={preloaderVisible && !preloaderExiting}
+      className={`portfolio-content${portfolioVisible ? ' portfolio-content--visible portfolio-content--revealing' : ''}`}
+      aria-hidden={!portfolioVisible}
+      inert={!portfolioVisible}
     >
     <main>
       <header className="topbar wrap">
@@ -243,7 +250,7 @@ function App() {
     </main>
     </div>
     {preloaderVisible && (
-      <Preloader exiting={preloaderExiting} onComplete={handlePreloaderComplete} />
+      <Preloader onSequenceStart={handlePreloaderSequenceStart} />
     )}
     </>
   );

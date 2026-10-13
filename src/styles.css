@@ -192,9 +192,9 @@ main>section:not(.hero){font-family:var(--typewriter);color:var(--body-ink)}
 @media(max-width:900px){.hero-right-collage{top:52%;right:0;height:43%;width:auto;max-width:37vw}}
 @media(max-width:600px){.hero-right-collage{top:56%;right:0;height:auto;width:min(45vw,235px);max-height:39%;max-width:none;object-fit:contain}}
 
-.portfolio-content{min-height:100svh;opacity:0;visibility:hidden;transition:opacity .65s ease}
+.portfolio-content{min-height:100svh;opacity:0;visibility:hidden;transition:opacity .5s ease-in-out}
 .portfolio-content--visible{opacity:1;visibility:visible}
-.preloader{position:fixed;inset:0;z-index:10000;display:grid;place-items:center;overflow:hidden;background:#fffaf5;color:#424044;opacity:1;transition:opacity .65s ease;pointer-events:auto}
+.preloader{position:fixed;inset:0;z-index:10000;display:grid;place-items:center;overflow:hidden;background:#fffaf5;color:#424044;animation:preloader-sequence 2s ease-in-out both;pointer-events:auto}
 .preloader::before,.preloader::after{position:absolute;content:"";pointer-events:none}
 .preloader::before{inset:24px;border:1px solid rgba(120,134,107,.2)}
 .preloader::after{width:min(48vw,420px);aspect-ratio:1;border:1px solid rgba(120,134,107,.11);border-radius:50%;box-shadow:0 0 0 34px rgba(120,134,107,.035),0 0 0 68px rgba(120,134,107,.025)}
@@ -206,6 +206,13 @@ main>section:not(.hero){font-family:var(--typewriter);color:var(--body-ink)}
 .preloader-revealed{color:#424044}
 .preloader-status{margin:27px 0 0;font-size:9px;letter-spacing:.1em}
 .preloader-status span{color:#78866b;letter-spacing:.2em}
-.preloader--exiting{opacity:0;pointer-events:none}
+@keyframes preloader-sequence{0%{opacity:0}25%{opacity:1}75%{opacity:1}100%{opacity:0}}
+.portfolio-content--revealing .hero-center>*{animation:hero-content-reveal .5s ease-in-out both}
+.portfolio-content--revealing .hero-center>*:nth-child(2){animation-delay:.08s}
+.portfolio-content--revealing .hero-center>*:nth-child(3){animation-delay:.16s}
+.portfolio-content--revealing .hero-center>*:nth-child(4){animation-delay:.24s}
+.portfolio-content--revealing .scroll-cue{animation:hero-scroll-reveal .5s ease-in-out both}
+@keyframes hero-content-reveal{from{opacity:0;transform:translateY(14px)}to{opacity:1;transform:translateY(0)}}
+@keyframes hero-scroll-reveal{from{opacity:0;transform:translate(-50%,14px)}to{opacity:1;transform:translate(-50%,0)}}
 @media(max-width:600px){.preloader::before{inset:14px}.preloader-label{font-size:9px;margin-bottom:20px}.preloader-message{font-size:clamp(20px,6vw,30px)}.preloader-status{margin-top:21px}}
-@media(prefers-reduced-motion:reduce){.portfolio-content,.preloader{transition:none}}
+@media(prefers-reduced-motion:reduce){.portfolio-content,.preloader{transition:none;animation:none}.portfolio-content--revealing .hero-center>*,.portfolio-content--revealing .scroll-cue{animation:none;opacity:1;transform:none}}
