@@ -4,15 +4,16 @@ import { Preloader } from './components/preloader.jsx';
 import './styles.css';
 
 const featured = [
-  { name: 'Good Days', detail: 'A calmer way to plan your week', kind: 'Product design · 2025', color: 'peach', eyebrow: 'A kinder kind of planning', headline: 'Make room for a good day.', note: 'Your week, with a little more breathing room.', tiles: ['Today, gently', 'A small win', 'Make some space'] },
-  { name: 'Common Ground', detail: 'Making local discovery feel personal', kind: 'Digital experience · 2024', color: 'sage', eyebrow: 'Find your people', headline: 'Good things are closer.', note: 'Places and people worth getting to know.', tiles: ['Around the corner', 'Saved for later', 'This weekend'] },
-  { name: 'Small Hours', detail: 'A little space for better sleep', kind: 'Concept · 2024', color: 'blue', eyebrow: 'An evening ritual', headline: 'Let the day settle.', note: 'Tiny rituals for slower evenings and softer mornings.', tiles: ['Unwind', 'A quiet sound', 'Sleep well'] },
+  { name: 'Home-lab', detail: 'Documentation of my homelab project', kind: 'Self-hosting · 2026', color: 'peach', url: 'https://github.com/abhi9d01-png/Home-lab' },
+  { name: 'web01', detail: 'Personal portfolio and IT engineering showcase', kind: 'Frontend · 2026', color: 'sage', url: 'https://github.com/abhi9d01-png/web01' },
+  { name: 'DevBuddy', detail: 'A developer-focused project and learning space', kind: 'Developer tools · 2026', color: 'blue', url: 'https://github.com/abhi9d01-png/DevBuddy' },
 ];
 
 const otherWork = [
-  { name: 'Field Notes', type: 'Brand & web', year: '2023', summary: 'A home for curious people who like to get outside.' },
-  { name: 'Soft Signal', type: 'Interface design', year: '2023', summary: 'A quieter, more thoughtful way to keep in touch.' },
-  { name: '100 Days of Play', type: 'Daily practice', year: '2022', summary: 'Small experiments in shape, color, and interaction.' },
+  { name: 'RouteGuard', type: 'Network security', year: '2026', summary: 'A project exploring safer routes and network protection.', url: 'https://github.com/abhi9d01-png/RouteGuard' },
+  { name: 'Home-lab', type: 'Self-hosting', year: '2026', summary: 'Documentation of my homelab project.', url: 'https://github.com/abhi9d01-png/Home-lab' },
+  { name: 'web01', type: 'Frontend', year: '2026', summary: 'Personal portfolio and IT engineering showcase.', url: 'https://github.com/abhi9d01-png/web01' },
+  { name: 'DevBuddy', type: 'Developer tools', year: '2026', summary: 'A developer-focused project and learning space.', url: 'https://github.com/abhi9d01-png/DevBuddy' },
 ];
 
 function SectionLabel({ children }) {
@@ -130,9 +131,11 @@ function DraggableProjectStack() {
               <span>Selected work</span>
               <span>0{index + 1} / 03</span>
             </div>
-            <h3>{project.name}</h3>
-            <p>{project.detail}</p>
-            <span className="project-card-kind">{project.kind}<span aria-hidden="true"> ↗</span></span>
+            <a className="project-card-link" href={project.url} target="_blank" rel="noreferrer">
+              <h3>{project.name}</h3>
+              <p>{project.detail}</p>
+              <span className="project-card-kind">{project.kind}<span aria-hidden="true"> ↗</span></span>
+            </a>
           </article>
         );
       })}
@@ -222,7 +225,7 @@ function App() {
         <SectionLabel>Other work <span aria-hidden="true">⁕</span></SectionLabel>
         <div className="work-list">
           {otherWork.map((item, index) => (
-            <a className="work-row" href="#contact" key={item.name}>
+            <a className="work-row" href={item.url} target="_blank" rel="noreferrer" key={item.name}>
               <span className="row-index">0{index + 1}</span>
               <span className="row-main"><strong>{item.name}</strong><span>{item.summary}</span></span>
               <span className="row-type">{item.type}</span>

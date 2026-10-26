@@ -4,16 +4,15 @@ import { EncryptedText } from './ui/encrypted-text.jsx';
 export function Preloader({ onSequenceStart }) {
   const [animationStarted, setAnimationStarted] = React.useState(false);
 
-  function handleAnimationStart() {
+  React.useEffect(() => {
     setAnimationStarted(true);
     onSequenceStart();
-  }
+  }, [onSequenceStart]);
 
   return (
     <div
       className="preloader"
       style={{ opacity: 0 }}
-      onAnimationStart={handleAnimationStart}
     >
       <div className="preloader-content">
         <p className="preloader-label">Portfolio / Network Systems</p>

@@ -14,6 +14,20 @@
 			],
 			"isBackground": true,
 			"problemMatcher": []
+		},
+		{
+			"label": "Start portfolio dev server",
+			"type": "shell",
+			"command": "npm.cmd",
+			"args": [
+				"run",
+				"dev",
+				"--",
+				"--host",
+				"127.0.0.1"
+			],
+			"isBackground": true,
+			"problemMatcher": []
 		}
 	]
 }
